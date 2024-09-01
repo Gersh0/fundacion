@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProviderModule } from './provider/provider.module';
-import { ClientModule } from './client/client.module';
 import { OrganModule } from './organ/organ.module';
 import { QualityCheckModule } from './quality-check/quality-check.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Client } from './client/entities/client.entity';
 import { Organ } from './organ/entities/organ.entity';
-import { Provider } from './provider/entities/provider.entity';
 import { QualityCheck } from './quality-check/entities/quality-check.entity';
+import { AuthModule } from './auth/auth.module';
+import { User } from './auth/entities/auth.entity';
 
 @Module({
   imports: [
@@ -22,14 +20,13 @@ import { QualityCheck } from './quality-check/entities/quality-check.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [Client, Organ, Provider, QualityCheck],
+      entities: [User, Organ, QualityCheck],
       autoLoadEntities: true,
       synchronize: true,
     }),
-    ProviderModule, 
-    ClientModule, 
+    AuthModule,
     OrganModule, 
-    QualityCheckModule],
+    QualityCheckModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
