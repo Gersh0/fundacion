@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsEmail, IsPhoneNumber, IsArray, IsNumber, MinLength, MaxLength, Matches } from 'class-validator';
+import { IsNotEmpty, IsString, IsEmail, IsPhoneNumber, IsArray, IsNumber, MinLength, MaxLength, Matches, IsBoolean, IsIn } from 'class-validator';
 
 
 export class CreateAuthDto {
@@ -28,4 +28,12 @@ export class CreateAuthDto {
     @IsArray()
     @IsNumber({}, { each: true })
     organs: number[];
+
+    @IsArray()
+    @IsString({ each: true })
+    @IsIn(['user', 'client', 'provider', 'admin'], { each: true })
+    roles: string[];
+
+    @IsBoolean()
+    isActive: boolean;
 }

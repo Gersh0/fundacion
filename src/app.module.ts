@@ -9,6 +9,7 @@ import { Organ } from './organ/entities/organ.entity';
 import { QualityCheck } from './quality-check/entities/quality-check.entity';
 import { AuthModule } from './auth/auth.module';
 import { User } from './auth/entities/auth.entity';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { User } from './auth/entities/auth.entity';
     }),
     AuthModule,
     OrganModule, 
-    QualityCheckModule, AuthModule],
+    QualityCheckModule, AuthModule, SeedModule],
   controllers: [AppController],
   providers: [AppService],
 })

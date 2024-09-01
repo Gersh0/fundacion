@@ -21,8 +21,8 @@ export class User {
     @Column()
     password: string;
 
-    @Column()
-    role: string;
+    @Column("simple-array")
+    roles: string[];
 
     @OneToMany(() => Organ, (organ) => organ.client)
     organs: Organ[];
