@@ -22,5 +22,7 @@ export class SeedService {
     
     await this.userRepository.save(USERS_SEED);
     await this.organRepository.save(ORGANS_SEED);
+
+    return 'Database populated successfully';
   }
 }
