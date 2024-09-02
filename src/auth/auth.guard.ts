@@ -16,6 +16,10 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
+    if (!roles) {
+      return true; // public route
+    }
+    
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
@@ -31,11 +35,16 @@ export class AuthGuard implements CanActivate {
         throw new UnauthorizedException('Unauthorized');
       }
 
-      if (roles && roles.length > 0) {
-        const hasRole = () => user.roles.some((role) => roles.includes(role));
-        if (!hasRole()) {
-          throw new ForbiddenException('Forbidden');
-        }
+      // if (roles && roles.length > 0) {
+      //   const hasRole = () => user.roles.some((role) => roles.includes(role));
+      //   if (!hasRole()) {
+      //     throw new ForbiddenException('Forbidden');
+      //   }
+      // }
+
+      const hasRole = () => user.roles.some((role) => roles.includes(role));
+      if (!hasRole()) {
+        throw new UnauthorizedException('Forbidden');
       }
 
       request.user = user;
