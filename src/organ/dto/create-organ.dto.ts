@@ -14,7 +14,6 @@ export class CreateOrganDto {
     @IsNumber()
     providerId: number;
 
-    @IsNotEmpty()
     @IsNumber()
     clientId: number;
 }

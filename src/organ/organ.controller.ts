@@ -1,11 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { OrganService } from './organ.service';
 import { CreateOrganDto } from './dto/create-organ.dto';
 import { UpdateOrganDto } from './dto/update-organ.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @Controller('organ')
+@UseGuards(AuthGuard)
 export class OrganController {
-  constructor(private readonly organService: OrganService) {}
+  constructor(
+    private readonly organService: OrganService) {}
 
   @Post()
   create(@Body() createOrganDto: CreateOrganDto) {
@@ -13,6 +17,7 @@ export class OrganController {
   }
 
   @Get()
+  @Roles('admin')
   findAll() {
     return this.organService.findAll();
   }

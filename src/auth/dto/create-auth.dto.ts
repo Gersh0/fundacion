@@ -30,6 +30,7 @@ export class CreateAuthDto {
     organs: number[];
 
     @IsArray()
+    @IsNotEmpty()
     @IsString({ each: true })
     @IsIn(['user', 'client', 'provider', 'admin'], { each: true })
     roles: string[];

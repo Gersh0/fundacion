@@ -13,6 +13,8 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
       DB_PORT: ${DB_PORT}
+      PORT: ${PORT}
+      SECRET_KEY: ${SECRET_KEY}
     container_name: fundacion-api
     depends_on:
       - db
