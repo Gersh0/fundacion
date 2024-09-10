@@ -5,7 +5,6 @@ import { User } from './entities/auth.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { uuid } from 'uuidv4';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +23,9 @@ export class AuthService {
       const newUser = this.userRepository.create({
         ...createAuthDto,
         password: hashedPassword,
+        organs: [] //Estoy mandando arreglo de organos vacio para inicializarlo. Pero si recibimos del DTO el arreglo de IDs de organos, debemos hacer un find de cada uno y mandarlos en el arreglo de organs, eso era todo :)
       });
+      return newUser;
 
     } catch (error) {
       console.log(error)

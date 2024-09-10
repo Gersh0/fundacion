@@ -25,9 +25,7 @@ export class CreateAuthDto {
     @IsString()
     address: string;
 
-    @IsArray()
-    @IsNumber({}, { each: true })
-    organs: number[];
+    //El arreglo de órganos en el DTO debe tener un arreglo de numeros que corresponden a las id de los órganos que tiene. Pero en la entidad se deben enviar como objetos de tipo Organ
 
     @IsArray()
     @IsNotEmpty()
