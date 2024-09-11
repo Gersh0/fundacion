@@ -8,9 +8,9 @@ import { User } from './entities/auth.entity';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private readonly jwtService: JwtService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
     private readonly reflector: Reflector,
   ) {}
 

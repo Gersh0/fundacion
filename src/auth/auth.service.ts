@@ -96,6 +96,7 @@ export class AuthService {
         });
       }
       const newUser = await this.userRepository.preload({
+        id: id,
         password: hashedPassword,
         organs: organs,
         ...updateAuthDto
