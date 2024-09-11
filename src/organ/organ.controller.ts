@@ -17,22 +17,25 @@ export class OrganController {
   }
 
   @Get()
-  @Roles('admin')
+  @Roles('admin', 'user', 'provider')
   findAll() {
     return this.organService.findAll();
   }
 
   @Get(':id')
+  @Roles('admin', 'user', 'provider')
   findOne(@Param('id') id: string) {
     return this.organService.findOne(+id);
   }
 
   @Patch(':id')
+  @Roles('admin')
   update(@Param('id') id: string, @Body() updateOrganDto: UpdateOrganDto) {
     return this.organService.update(+id, updateOrganDto);
   }
 
   @Delete(':id')
+  @Roles('admin')
   remove(@Param('id') id: string) {
     return this.organService.remove(+id);
   }
