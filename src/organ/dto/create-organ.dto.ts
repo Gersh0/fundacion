@@ -1,20 +1,24 @@
-import { IsBoolean, isEmpty, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateOrganDto {
-    
-    @IsNotEmpty()
-    @IsString()
-    type: string;
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({ example: 'Kidney', description: 'The type of the organ' })
+  type: string;
 
-    @IsNotEmpty()
-    @IsBoolean()
-    availability: boolean;
+  @IsNotEmpty()
+  @IsBoolean()
+  @ApiProperty({ example: true, description: 'Is the organ available?' })
+  availability: boolean;
 
-    @IsNotEmpty()
-    @IsNumber()
-    providerId: number;
+  @IsNotEmpty()
+  @IsNumber()
+  @ApiProperty({ example: 1, description: 'The ID of the provider' })
+  providerId: number;
 
-    @IsOptional()
-    @IsNumber()
-    clientId: number;
+  @IsOptional()
+  @IsNumber()
+  @ApiProperty({ example: 2, description: 'The ID of the client', required: false })
+  clientId: number;
 }
