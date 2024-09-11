@@ -1,33 +1,38 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateAuthDto,UpdateAuthDto } from './dto';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/auth.entity';
 import { Repository } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { CreateAuthDto, LoginDto, UpdateAuthDto } from './dto';
+import { User } from './entities/auth.entity';
+import { Organ } from '../organ/entities/organ.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
 
-  constructor(@InjectRepository(User) 
-  private readonly userRepository: Repository<User>,
-  private readonly organRepository: Repository<User>,
-  private readonly jwtService: JwtService
-  ) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+
+    @InjectRepository(Organ)
+    private readonly organRepository: Repository<Organ>,
+
+    private readonly jwtService: JwtService
+  ) { }
 
 
   async create(createAuthDto: CreateAuthDto) {
-    try{
+    try {
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(createAuthDto.password, salt);
       const organs = []
 
-      if(createAuthDto.organs.length > 0){
+      if (createAuthDto.organs.length > 0) {
         createAuthDto.organs.forEach(async organId => {
-          const organ = await this.organRepository.findOneBy({id: organId})
-          if(!organ){
+          const organ = await this.organRepository.findOneBy({ id: organId })
+          if (!organ) {
             throw new BadRequestException('Organ not found')
-          } else{
+          } else {
             organs.push(organ)
           }
         });
@@ -38,6 +43,8 @@ export class AuthService {
         password: hashedPassword,
         organs: organs
       });
+
+      await this.userRepository.save(newUser);
       return newUser;
 
     } catch (error) {
@@ -47,9 +54,9 @@ export class AuthService {
   }
 
   async findAll() {
-    try{
+    try {
       const users = await this.userRepository.find();
-      if(!users){
+      if (!users) {
         throw new BadRequestException('No user found')
       }
       return users;
@@ -69,5 +76,17 @@ export class AuthService {
 
   remove(id: number) {
     return `This action removes a #${id} auth`;
+  }
+
+  async login(loginDto: LoginDto): Promise<{ token: string }> {
+    const user = await this.userRepository.findOne({
+      where: { email: loginDto.email },
+    });
+
+    if (!user || !(await bcrypt.compare(loginDto.password, user.password))) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return { token: this.jwtService.sign({ email: user.email }) };
   }
 }
