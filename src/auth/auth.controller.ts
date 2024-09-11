@@ -1,8 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto, LoginDto, UpdateAuthDto  } from './dto';
+import { Roles } from './decorators/roles.decorator';
+import { AuthGuard } from './auth.guard';
 
 @Controller('auth')
+@UseGuards(AuthGuard)
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -17,11 +20,13 @@ export class AuthController {
   }
 
   @Get()
+  @Roles('admin')
   findAll() {
     return this.authService.findAll();
   }
 
   @Get(':id')
+  @Roles('admin')
   findOne(@Param('id') id: string) {
     return this.authService.findOne(+id);
   }
@@ -32,6 +37,7 @@ export class AuthController {
   }
 
   @Delete(':id')
+  @Roles('admin')
   remove(@Param('id') id: string) {
     return this.authService.remove(+id);
   }
