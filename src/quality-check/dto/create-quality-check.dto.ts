@@ -1,4 +1,4 @@
-import { IsBoolean, IsDate, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsDate, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 import { Type } from 'class-transformer';
 export class CreateQualityCheckDto {
     @IsNotEmpty()
@@ -14,6 +14,7 @@ export class CreateQualityCheckDto {
     @IsBoolean()
     result: boolean;
 
+    @IsOptional()
     @IsString()
     notes?: string;
 }

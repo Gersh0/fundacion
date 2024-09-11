@@ -4,6 +4,7 @@ import { UpdateQualityCheckDto } from './dto/update-quality-check.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QualityCheck } from './entities/quality-check.entity';
 import { Repository } from 'typeorm';
+import { Organ } from 'src/organ/entities/organ.entity';
 
 @Injectable()
 export class QualityCheckService {
@@ -11,11 +12,26 @@ export class QualityCheckService {
   constructor(
     @InjectRepository(QualityCheck)
     private readonly qualityCheckRepository: Repository<QualityCheck>,
+    @InjectRepository(Organ)
+    private readonly organRepository: Repository<Organ>
   ) {}
 
   async create(createQualityCheckDto: CreateQualityCheckDto) {
     try{
-      const qualityCheck = this.qualityCheckRepository.create(createQualityCheckDto);
+      const organId = createQualityCheckDto.organId;
+      const organ = await this.organRepository.findOne({where: {id: organId}});
+      if(!organ){
+        throw new BadRequestException('Organ not found')
+      }
+      let notes = null;
+      if (createQualityCheckDto.notes) {
+        notes = createQualityCheckDto.notes;
+      }
+      const qualityCheck = this.qualityCheckRepository.create({
+        organ: organ,
+        notes: notes,
+        ...createQualityCheckDto
+      });
       return await this.qualityCheckRepository.save(qualityCheck);
     } catch (error) {
       console.log(error)

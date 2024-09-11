@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsBoolean, isEmpty, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateOrganDto {
     
@@ -14,6 +14,7 @@ export class CreateOrganDto {
     @IsNumber()
     providerId: number;
 
+    @IsOptional()
     @IsNumber()
     clientId: number;
 }

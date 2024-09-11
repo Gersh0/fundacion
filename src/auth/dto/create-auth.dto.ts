@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsEmail, IsPhoneNumber, IsArray, IsNumber, MinLength, MaxLength, Matches, IsBoolean, IsIn, isArray } from 'class-validator';
+import { IsNotEmpty, IsString, IsEmail, IsPhoneNumber, IsArray, IsNumber, MinLength, MaxLength, Matches, IsBoolean, IsIn, isArray, IsOptional } from 'class-validator';
 
 
 export class CreateAuthDto {
@@ -26,6 +26,7 @@ export class CreateAuthDto {
     address: string;
 
     //El arreglo de órganos en el DTO debe tener un arreglo de numeros que corresponden a las id de los órganos que tiene. Pero en la entidad se deben enviar como objetos de tipo Organ
+    @IsOptional()
     @IsArray()
     @IsNumber({}, { each: true })
     organs: number[];
@@ -37,6 +38,7 @@ export class CreateAuthDto {
     @IsIn(['user', 'client', 'provider', 'admin'], { each: true })
     roles: string[];
 
+    @IsOptional()
     @IsBoolean()
     isActive: boolean;
 }
