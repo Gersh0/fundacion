@@ -33,11 +33,14 @@ export class AuthService {
         });
       }
 
-      const newUser = this.userRepository.create({
+      const newUser = await this.userRepository.create({
         ...createAuthDto,
         password: hashedPassword,
         organs: organs
       });
+
+      await this.userRepository.save(newUser);
+    
       return newUser;
 
     } catch (error) {
@@ -59,15 +62,60 @@ export class AuthService {
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
+  async findOne(id: number) {
+    try{
+      const user = await this.userRepository.findOneBy({id : id});
+      if(!user){
+        throw new BadRequestException('No user found')
+      }
+      return user;
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException(error.detail);
+    }
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
+  async update(id: number, updateAuthDto: UpdateAuthDto) {
+    try{
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(updateAuthDto.password, salt);
+      const organs = []
+
+      if(updateAuthDto.organs.length > 0){
+        updateAuthDto.organs.forEach(async organId => {
+          const organ = await this.organRepository.findOneBy({id: organId})
+          if(!organ){
+            throw new BadRequestException('Organ not found')
+          } else{
+            organs.push(organ)
+          }
+        });
+      }
+      const newUser = await this.userRepository.preload({
+        password: hashedPassword,
+        organs: organs,
+        ...updateAuthDto
+      });
+      await this.userRepository.save(newUser);
+      return newUser;
+
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException(error.detail);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async remove(id: number) {
+    try{
+      const user = await this.userRepository.findOneBy({id : id});
+      if(!user){
+        throw new BadRequestException('No user found')
+      }
+      await this.userRepository.remove(user);
+      return user;
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException(error.detail);
+    }
   }
 }
