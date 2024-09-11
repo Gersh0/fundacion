@@ -135,4 +135,59 @@ export class AuthService {
 
     return { token: this.jwtService.sign({ email: user.email }) };
   }
+
+  async findAllClients() {
+    try {
+      const users = await this.userRepository.find({ where: { roles: 'client' } });
+      if (!users) {
+        throw new BadRequestException('No user found')
+      }
+      return users;
+    } catch (error) {
+      console.log(error)
+      throw new BadRequestException(error.detail)
+    }
+  }
+
+
+  async findAllProviders() {
+    try {
+      const users = await this.userRepository.find({ where: { roles: 'provider' } });
+      if (!users) {
+        throw new BadRequestException('No user found')
+      }
+      return users;
+    } catch (error) {
+      console.log(error)
+      throw new BadRequestException(error.detail)
+    }
+  } 
+
+  async findProviderById(id: number) {
+    try {
+      const user = await this.userRepository.findOne({ where: { id: id, roles: 'provider' } });
+      if (!user) {
+        throw new BadRequestException('No user found')
+      }
+      return user;
+    } catch (error) {
+      console.log(error)
+      throw new BadRequestException(error.detail)
+    }
+  }
+
+  async findClientById(id: number) {
+    try {
+      const user = await this.userRepository.findOne({ where: { id: id, roles: 'client' } });
+      if (!user) {
+        throw new BadRequestException('No user found')
+      }
+      return user;
+    } catch (error) {
+      console.log(error)
+      throw new BadRequestException(error.detail)
+    }
+  }
+
+
 }

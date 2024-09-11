@@ -35,6 +35,41 @@ export class AuthController {
     return this.authService.findAll();
   }
 
+  @Get('clients')
+  @Roles('admin')
+  @ApiOperation({ summary: 'Get all clients' })
+  @ApiResponse({ status: 200, description: 'Return all clients.' })
+  findAllClients() {
+    return this.authService.findAllClients();
+  }
+
+  @Get('providers')
+  @Roles('admin')
+  @ApiOperation({ summary: 'Get all providers' })
+  @ApiResponse({ status: 200, description: 'Return all providers.' })
+  findAllProviders() {
+    return this.authService.findAllProviders();
+  }
+
+  @Get('clients/:id')
+  @Roles('admin')
+  @ApiOperation({ summary: 'Get a client by ID' })
+  @ApiParam({ name: 'id', type: String })
+  @ApiResponse({ status: 200, description: 'Return the client.' })
+  findOneClient(@Param('id') id: string) {
+    return this.authService.findClientById(+id);
+  }
+
+  @Get('providers/:id')
+  @Roles('admin')
+  @ApiOperation({ summary: 'Get a provider by ID' })
+  @ApiParam({ name: 'id', type: String })
+  @ApiResponse({ status: 200, description: 'Return the provider.' })
+  findOneProvider(@Param('id') id: string) {
+    return this.authService.findProviderById(+id);
+  }
+
+
   @Get(':id')
   @Roles('admin')
   @ApiOperation({ summary: 'Get a user by ID' })
