@@ -11,6 +11,7 @@ export class AuthService {
 
   constructor(@InjectRepository(User) 
   private readonly userRepository: Repository<User>,
+  private readonly organRepository: Repository<User>,
   private readonly jwtService: JwtService
   ) {}
 
@@ -19,11 +20,23 @@ export class AuthService {
     try{
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(createAuthDto.password, salt);
+      const organs = []
+
+      if(createAuthDto.organs.length > 0){
+        createAuthDto.organs.forEach(async organId => {
+          const organ = await this.organRepository.findOneBy({id: organId})
+          if(!organ){
+            throw new BadRequestException('Organ not found')
+          } else{
+            organs.push(organ)
+          }
+        });
+      }
 
       const newUser = this.userRepository.create({
         ...createAuthDto,
         password: hashedPassword,
-        organs: [] //Estoy mandando arreglo de organos vacio para inicializarlo. Pero si recibimos del DTO el arreglo de IDs de organos, debemos hacer un find de cada uno y mandarlos en el arreglo de organs, eso era todo :)
+        organs: organs
       });
       return newUser;
 
