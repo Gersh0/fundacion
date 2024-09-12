@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { OrganService } from './organ.service';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { CreateOrganDto } from './dto/create-organ.dto';
 import { UpdateOrganDto } from './dto/update-organ.dto';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { OrganService } from './organ.service';
+import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('organ')
 @Controller('organ')

@@ -116,7 +116,11 @@ export class AuthService {
       if(!user){
         throw new BadRequestException('No user found')
       }
-      await this.userRepository.remove(user);
+      await this.userRepository.preload({
+        id: id,
+        isActive: false
+      });
+      await this.userRepository.save(user);
       return user;
     } catch (error) {
       console.log(error);

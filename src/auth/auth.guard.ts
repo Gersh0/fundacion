@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/auth.entity';
 
@@ -35,12 +35,13 @@ export class AuthGuard implements CanActivate {
         throw new UnauthorizedException('Unauthorized');
       }
 
-      // if (roles && roles.length > 0) {
-      //   const hasRole = () => user.roles.some((role) => roles.includes(role));
-      //   if (!hasRole()) {
-      //     throw new ForbiddenException('Forbidden');
-      //   }
-      // }
+      if (roles && roles.length > 0) {
+        const hasRole = () => user.roles.some((role)=> roles.includes(role));
+
+        if (!hasRole()) {
+          throw new ForbiddenException('Forbidden');
+        }
+      }
 
       const hasRole = () => user.roles.some((role) => roles.includes(role));
       if (!hasRole()) {
