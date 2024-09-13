@@ -28,19 +28,21 @@ export class OrganService {
       }
       
       let client = null;
-      if (clientId) {
-        client = await this.userRepository.findOne({ where: { id: clientId, roles: 'client' } });
-        if (!client) {
-          throw new BadRequestException('Client not found');
+      if(clientId){
+        client = await this.userRepository.findOne({where: {id: clientId, roles: 'client'}});
+        if(!client){
+        throw new BadRequestException('Client not found')
         }
       }
-
+      
       const organ = this.organRepository.create({
         ...createOrganDto,
         provider: provider,
         client: client
       });
+
       return await this.organRepository.save(organ);
+
     } catch (error) {
       console.log(error)
       throw new BadRequestException(error.detail)
