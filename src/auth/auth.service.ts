@@ -43,6 +43,7 @@ export class AuthService {
       // Create a new user with the provided data and hashed password
       const newUser = await this.userRepository.create({
         ...createAuthDto,
+        isActive: true,
         password: hashedPassword,
         organs: organs
       });
@@ -88,15 +89,15 @@ export class AuthService {
   // Method to update a user
   async update(id: number, updateAuthDto: UpdateAuthDto) {
     try {
-      // Prevent deactivating a user through this method
-      if (updateAuthDto.isActive === false) {
-        throw new BadRequestException('Cannot deactivate a user, use the DELETE method instead');
-      }
-
       // Find the user by ID
       const user = await this.userRepository.findOneBy({ id });
       if (!user) {
         throw new BadRequestException('User not found');
+      }
+      
+      // Prevent deactivating a user through this method
+      if (user.isActive === false) {
+        throw new BadRequestException('Cannot deactivate a user, use the DELETE method instead');
       }
 
       // Encrypt password if it exists in the DTO

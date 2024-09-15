@@ -41,9 +41,4 @@ export class CreateAuthDto {
   @IsIn(['user', 'client', 'provider', 'admin'], { each: true })
   @ApiProperty({ example: ['user'], description: 'The roles of the user' })
   roles: string[];
-
-  @IsOptional()
-  @IsBoolean()
-  @ApiProperty({ example: true, description: 'Is the user active?', required: false })
-  isActive: boolean;
 }
