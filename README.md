@@ -22,14 +22,15 @@
 ```
 docker compose --env-file .env up --build -d
 ```
-
 5. Rebuild the database with the seed
-
 ```
-http://localhost:3000/seed 
+http://localhost:<port>/seed 
 ```
-
-6. Postman requests
+6. See documentation
+```
+http://localhost:<port>/api 
+```
+7. Postman requests
 ```
 https://documenter.getpostman.com/view/34387005/2sAXqp7iM8
 ```
