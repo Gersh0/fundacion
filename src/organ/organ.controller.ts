@@ -1,8 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { CreateOrganDto } from './dto/create-organ.dto';
-import { UpdateOrganDto } from './dto/update-organ.dto';
+import { CreateOrganDto, UpdateOrganDto } from './dto';
 import { OrganService } from './organ.service';
 import { AuthGuard } from '../auth/auth.guard';
 
@@ -13,6 +12,7 @@ export class OrganController {
   constructor(private readonly organService: OrganService) {}
 
   @Post()
+  @Roles('admin', 'provider')
   @ApiOperation({ summary: 'Create a new organ' })
   @ApiBody({ type: CreateOrganDto })
   @ApiResponse({ status: 201, description: 'Organ created successfully.' })
@@ -21,7 +21,7 @@ export class OrganController {
   }
 
   @Get()
-  @Roles('admin', 'user', 'provider')
+  @Roles('admin', 'client', 'provider')
   @ApiOperation({ summary: 'Get all organs' })
   @ApiResponse({ status: 200, description: 'Return all organs.' })
   findAll() {
@@ -29,7 +29,7 @@ export class OrganController {
   }
 
   @Get(':id')
-  @Roles('admin', 'user', 'provider')
+  @Roles('admin', 'client', 'provider')
   @ApiOperation({ summary: 'Get an organ by ID' })
   @ApiParam({ name: 'id', type: String })
   @ApiResponse({ status: 200, description: 'Return the organ.' })

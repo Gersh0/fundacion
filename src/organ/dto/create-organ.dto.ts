@@ -8,11 +8,6 @@ export class CreateOrganDto {
   type: string;
 
   @IsNotEmpty()
-  @IsBoolean()
-  @ApiProperty({ example: true, description: 'Is the organ available?' })
-  availability: boolean;
-
-  @IsNotEmpty()
   @IsNumber()
   @ApiProperty({ example: 1, description: 'The ID of the provider' })
   providerId: number;

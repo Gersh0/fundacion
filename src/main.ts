@@ -1,15 +1,15 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common/pipes';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // remove unwanted fields
-      forbidNonWhitelisted: true, // throw an error if unwanted fields are present
-      // transform: true, // transform payload to DTO
+      whitelist: true,
+      forbidNonWhitelisted: true, 
+      // transform: true,
       // transformOptions: {
       //   enableImplicitConversion: true,
       // },

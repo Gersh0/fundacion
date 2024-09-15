@@ -1,5 +1,5 @@
-import { Organ } from 'src/organ/entities/organ.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Organ } from 'src/organ/entities/organ.entity';
 
 @Entity()
 export class QualityCheck {

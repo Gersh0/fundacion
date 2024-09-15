@@ -1,10 +1,10 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { InjectRepository } from "@nestjs/typeorm";
-import { ExtractJwt, Strategy } from "passport-jwt";
 import { Repository } from "typeorm";
-import { User } from "../entities/auth.entity";
 import { JwtPayload } from "../interfaces/jtw.payload";
+import { ExtractJwt, Strategy } from "passport-jwt";
+import { User } from "../entities/auth.entity";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy){

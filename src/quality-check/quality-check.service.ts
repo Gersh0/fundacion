@@ -1,9 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateQualityCheckDto } from './dto/create-quality-check.dto';
-import { UpdateQualityCheckDto } from './dto/update-quality-check.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QualityCheck } from './entities/quality-check.entity';
 import { Repository } from 'typeorm';
+import { CreateQualityCheckDto,UpdateQualityCheckDto } from './dto';
+import { QualityCheck } from './entities/quality-check.entity';
 import { Organ } from 'src/organ/entities/organ.entity';
 
 @Injectable()

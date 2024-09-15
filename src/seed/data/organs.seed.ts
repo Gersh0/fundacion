@@ -8,7 +8,7 @@ export const ORGANS_SEED: Organ[] = [
         qualityChecks: [],
         provider: USERS_SEED[2],
         client: USERS_SEED[1],
-        id: 0
+        id: 1
     },
     {
         type: 'Liver',
@@ -16,7 +16,7 @@ export const ORGANS_SEED: Organ[] = [
         qualityChecks: [],
         provider: USERS_SEED[4],
         client: USERS_SEED[3],
-        id: 1
+        id: 2
     },
     {
         type: 'Heart',
@@ -24,7 +24,7 @@ export const ORGANS_SEED: Organ[] = [
         qualityChecks: [],
         provider: USERS_SEED[2],
         client: USERS_SEED[6],
-        id: 2
+        id: 3
     },
     {
         type: 'Lung',
@@ -32,7 +32,7 @@ export const ORGANS_SEED: Organ[] = [
         qualityChecks: [],
         provider: USERS_SEED[7],
         client: USERS_SEED[8],
-        id: 3
+        id: 4
     },
     {
         type: 'Pancreas',
@@ -40,7 +40,7 @@ export const ORGANS_SEED: Organ[] = [
         qualityChecks: [],
         provider: USERS_SEED[4],
         client: USERS_SEED[9],
-        id: 4
+        id: 5
     },
     {
         type: 'Intestine',
@@ -48,7 +48,7 @@ export const ORGANS_SEED: Organ[] = [
         qualityChecks: [],
         provider: USERS_SEED[7],
         client: USERS_SEED[9],
-        id: 5
+        id: 6
     },
     {
         type: 'Cornea',
@@ -56,7 +56,7 @@ export const ORGANS_SEED: Organ[] = [
         qualityChecks: [],
         provider: USERS_SEED[2],
         client: USERS_SEED[5],
-        id: 0
+        id: 7
     },
     {
         type: 'Skin',
@@ -64,7 +64,7 @@ export const ORGANS_SEED: Organ[] = [
         qualityChecks: [],
         provider: USERS_SEED[7],
         client: USERS_SEED[3],
-        id: 6
+        id: 8
     },
     {
         type: 'Bone Marrow',
@@ -72,7 +72,7 @@ export const ORGANS_SEED: Organ[] = [
         qualityChecks: [],
         provider: USERS_SEED[7],
         client: USERS_SEED[5],
-        id: 7
+        id: 9
     },
     {
         type: 'Blood',
@@ -80,6 +80,6 @@ export const ORGANS_SEED: Organ[] = [
         qualityChecks: [],
         provider: USERS_SEED[4],
         client: USERS_SEED[1],
-        id: 8
+        id: 10
     }
 ];

@@ -1,9 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { QualityCheckService } from './quality-check.service';
-import { CreateQualityCheckDto } from './dto/create-quality-check.dto';
-import { UpdateQualityCheckDto } from './dto/update-quality-check.dto';
-import { Roles } from '../auth/decorators/roles.decorator';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
+import { CreateQualityCheckDto, UpdateQualityCheckDto } from './dto';
+import { QualityCheckService } from './quality-check.service';
+import { Roles } from '../auth/decorators/roles.decorator';
 import { AuthGuard } from '../auth/auth.guard';
 
 @ApiTags('quality-check')

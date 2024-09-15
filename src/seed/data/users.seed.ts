@@ -9,7 +9,7 @@ export const USERS_SEED: User[] = [
         address: '123 Main St, Springfield',
         organs: [],
         roles: ['user'],
-        id: 0,
+        id: 1,
         isActive: true
     },
     {
@@ -20,7 +20,7 @@ export const USERS_SEED: User[] = [
         address: '456 Elm St, Springfield',
         organs: [],
         roles: ['client'],
-        id: 1,
+        id: 2,
         isActive: true
     },
     {
@@ -31,7 +31,7 @@ export const USERS_SEED: User[] = [
         address: '789 Oak St, Springfield',
         organs: [],
         roles: ['provider'],
-        id: 2,
+        id: 3,
         isActive: true
     },
     {
@@ -42,7 +42,7 @@ export const USERS_SEED: User[] = [
         address: '101 Pine St, Springfield',
         organs: [],
         roles: ['client'],
-        id: 3,
+        id: 4,
         isActive: true
     },
     {
@@ -53,7 +53,7 @@ export const USERS_SEED: User[] = [
         address: '202 Maple St, Springfield',
         organs: [],
         roles: ['provider'],
-        id: 4,
+        id: 5,
         isActive: true
     },
     {
@@ -64,7 +64,7 @@ export const USERS_SEED: User[] = [
         address: '303 Birch St, Springfield',
         organs: [],
         roles: ['client'],
-        id: 5,
+        id: 6,
         isActive: true
     },
     {
@@ -75,7 +75,7 @@ export const USERS_SEED: User[] = [
         address: '404 Cedar St, Springfield',
         organs: [],
         roles: ['client'],
-        id: 6,
+        id: 7,
         isActive: true
     },
     {
@@ -86,7 +86,7 @@ export const USERS_SEED: User[] = [
         address: '505 Walnut St, Springfield',
         organs: [],
         roles: ['provider'],
-        id: 7,
+        id: 8,
         isActive: true
     },
     {
@@ -97,7 +97,7 @@ export const USERS_SEED: User[] = [
         address: '606 Chestnut St, Springfield',
         organs: [],
         roles: ['client'],
-        id: 8,
+        id: 9,
         isActive: true
     },
     {
@@ -108,7 +108,7 @@ export const USERS_SEED: User[] = [
         address: '707 Willow St, Springfield',
         organs: [],
         roles: ['client'],
-        id: 9,
+        id: 10,
         isActive: true
     }
 ];

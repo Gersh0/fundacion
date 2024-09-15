@@ -1,10 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateOrganDto } from './dto/create-organ.dto';
-import { UpdateOrganDto } from './dto/update-organ.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Organ } from './entities/organ.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/auth/entities/auth.entity';
+import { CreateOrganDto, UpdateOrganDto } from './dto';
+import { User } from '../auth/entities/auth.entity';
+import { Organ } from './entities/organ.entity';
 
 @Injectable()
 export class OrganService {
@@ -37,6 +36,7 @@ export class OrganService {
       
       const organ = this.organRepository.create({
         ...createOrganDto,
+        availability: true,
         provider: provider,
         client: client
       });
@@ -78,34 +78,49 @@ export class OrganService {
 
 
   async update(id: number, updateOrganDto: UpdateOrganDto) {
-    try{
-      const organ = await this.organRepository.preload({
-        id : id,
-        ...updateOrganDto
-      });
-      if(!organ){
-        throw new BadRequestException('No organ found')
+    try {
+      // Find the organ by ID
+      const organ = await this.organRepository.findOneBy({ id });
+      if (!organ || !organ.availability) {
+        throw new BadRequestException('No organ found');
       }
+
+      // Update only the fields that are present in the DTO
+      Object.keys(updateOrganDto).forEach(key => {
+        if (updateOrganDto[key] !== undefined) {
+          organ[key] = updateOrganDto[key];
+        }
+      });
+
+      // Save the updated organ to the database
       await this.organRepository.save(organ);
       return organ;
+
     } catch (error) {
       console.log(error);
-      throw new BadRequestException(error.detail);
+      throw new BadRequestException(error.detail || 'An error occurred while updating the organ');
     }
   }
 
-
   async remove(id: number) {
-    try{
-      const organ = await this.organRepository.findOneBy({id : id});
-      if(!organ){
-        throw new BadRequestException('No organ found')
+    try {
+      // Find the organ by ID
+      const organ = await this.organRepository.findOneBy({ id });
+      if (!organ) {
+        // Throw an exception if no organ is found
+        throw new BadRequestException('No organ found');
       }
-      await this.organRepository.remove(organ);
+
+      // Mark the organ as unavailable
+      organ.availability = false;
+
+      // Save the updated organ to the database
+      await this.organRepository.save(organ);
       return organ;
     } catch (error) {
+      // Log the error and throw a BadRequestException with the error details
       console.log(error);
-      throw new BadRequestException(error.detail);
+      throw new BadRequestException(error.detail || 'An error occurred while marking the organ as unavailable');
     }
   }
 

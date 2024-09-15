@@ -1,15 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OrganService } from './organ.service';
+import { QualityCheck } from '../quality-check/entities/quality-check.entity';
 import { OrganController } from './organ.controller';
+import { User } from '../auth/entities/auth.entity';
+import { AuthModule } from '../auth/auth.module';
 import { Organ } from './entities/organ.entity';
-import { QualityCheck } from 'src/quality-check/entities/quality-check.entity';
-import { User } from 'src/auth/entities/auth.entity';
-import { AuthService } from 'src/auth/auth.service';
-import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
-import { PassportModule } from '@nestjs/passport';
-import { AuthModule } from 'src/auth/auth.module';
+import { OrganService } from './organ.service';
 
 @Module({
   controllers: [OrganController],

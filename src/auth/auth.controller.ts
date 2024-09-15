@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
 import { CreateAuthDto, LoginDto, UpdateAuthDto } from './dto';
 import { Roles } from './decorators/roles.decorator';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
+import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 
 @ApiTags('auth')

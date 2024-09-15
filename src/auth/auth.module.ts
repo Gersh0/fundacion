@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { Organ } from '../organ/entities/organ.entity';
-import { User } from './entities/auth.entity';
-import { JwtStrategy } from './strategy/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
+import { Module } from '@nestjs/common';
+import { Organ } from '../organ/entities/organ.entity';
+import { JwtStrategy } from './strategy/jwt.strategy';
+import { AuthController } from './auth.controller';
+import { User } from './entities/auth.entity';
+import { AuthService } from './auth.service';
 
 @Module({
   controllers: [AuthController],
@@ -19,7 +19,7 @@ import { JwtModule } from '@nestjs/jwt';
     useFactory: async () => {
       return {
         secret: process.env.SECRET_KEY,
-        signOptions: { expiresIn: '1h' }
+        signOptions: { expiresIn: '15m' }
       }
     }
   }
