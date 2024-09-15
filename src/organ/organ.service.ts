@@ -5,84 +5,94 @@ import { CreateOrganDto, UpdateOrganDto } from './dto';
 import { User } from '../auth/entities/auth.entity';
 import { Organ } from './entities/organ.entity';
 
+// Marking the class as injectable so it can be injected into other classes
 @Injectable()
 export class OrganService {
 
+  // Constructor to inject dependencies
   constructor(
     @InjectRepository(Organ)
-    private readonly organRepository: Repository<Organ>,
+    private readonly organRepository: Repository<Organ>, // Injecting the Organ repository
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User> // Injecting the User repository
   ) {}
 
+  // Method to create a new organ
   async create(createOrganDto: CreateOrganDto) {
-    try{
-      
+    try {
+      // Extract providerId and clientId from DTO
       const providerId = createOrganDto.providerId;
       const clientId = createOrganDto.clientId;
 
-      const provider = await this.userRepository.findOne({where: {id: providerId, roles: 'provider'}});
-      if(!provider){
-        throw new BadRequestException('Provider not found')
+      // Find the provider by ID and role
+      const provider = await this.userRepository.findOne({ where: { id: providerId, roles: 'provider' } });
+      if (!provider) {
+        throw new BadRequestException('Provider not found'); // Throw an exception if no provider is found
       }
-      
+
       let client = null;
-      if(clientId){
-        client = await this.userRepository.findOne({where: {id: clientId, roles: 'client'}});
-        if(!client){
-        throw new BadRequestException('Client not found')
+      if (clientId) {
+        // Find the client by ID and role if clientId is provided
+        client = await this.userRepository.findOne({ where: { id: clientId, roles: 'client' } });
+        if (!client) {
+          throw new BadRequestException('Client not found'); // Throw an exception if no client is found
         }
       }
-      
+
+      // Create a new organ entity
       const organ = this.organRepository.create({
         ...createOrganDto,
-        availability: true,
+        availability: true, // Set availability to true
         provider: provider,
         client: client
       });
 
+      // Save the organ entity to the database
       return await this.organRepository.save(organ);
 
     } catch (error) {
-      console.log(error)
-      throw new BadRequestException(error.detail)
+      console.log(error);
+      throw new BadRequestException(error.detail); // Throw an exception if any error occurs
     }
   }
 
+  // Method to find all organs
   async findAll() {
-    try{
+    try {
+      // Find all organs in the repository
       const organs = await this.organRepository.find();
-      if(!organs){
-        throw new BadRequestException('No organ found')
+      if (!organs) {
+        throw new BadRequestException('No organ found'); // Throw an exception if no organs are found
       }
       return organs;
     } catch (error) {
-      console.log(error)
-      throw new BadRequestException(error.detail)
+      console.log(error);
+      throw new BadRequestException(error.detail); // Throw an exception if any error occurs
     }
   }
 
-
+  // Method to find an organ by ID
   async findOne(id: number) {
-    try{
-      const organ = await this.organRepository.findOneBy({id : id});
-      if(!organ){
-        throw new BadRequestException('No organ found')
+    try {
+      // Find the organ by ID
+      const organ = await this.organRepository.findOneBy({ id: id });
+      if (!organ) {
+        throw new BadRequestException('No organ found'); // Throw an exception if no organ is found
       }
       return organ;
     } catch (error) {
       console.log(error);
-      throw new BadRequestException(error.detail);
+      throw new BadRequestException(error.detail); // Throw an exception if any error occurs
     }
   }
 
-
+  // Method to update an organ by ID
   async update(id: number, updateOrganDto: UpdateOrganDto) {
     try {
       // Find the organ by ID
       const organ = await this.organRepository.findOneBy({ id });
       if (!organ || !organ.availability) {
-        throw new BadRequestException('No organ found');
+        throw new BadRequestException('No organ found'); // Throw an exception if no organ is found or organ is not available
       }
 
       // Update only the fields that are present in the DTO
@@ -98,17 +108,17 @@ export class OrganService {
 
     } catch (error) {
       console.log(error);
-      throw new BadRequestException(error.detail || 'An error occurred while updating the organ');
+      throw new BadRequestException(error.detail || 'An error occurred while updating the organ'); // Throw an exception if any error occurs
     }
   }
 
+  // Method to remove (mark as unavailable) an organ by ID
   async remove(id: number) {
     try {
       // Find the organ by ID
       const organ = await this.organRepository.findOneBy({ id });
       if (!organ) {
-        // Throw an exception if no organ is found
-        throw new BadRequestException('No organ found');
+        throw new BadRequestException('No organ found'); // Throw an exception if no organ is found
       }
 
       // Mark the organ as unavailable
@@ -118,22 +128,23 @@ export class OrganService {
       await this.organRepository.save(organ);
       return organ;
     } catch (error) {
-      // Log the error and throw a BadRequestException with the error details
       console.log(error);
-      throw new BadRequestException(error.detail || 'An error occurred while marking the organ as unavailable');
+      throw new BadRequestException(error.detail || 'An error occurred while marking the organ as unavailable'); // Throw an exception if any error occurs
     }
   }
 
+  // Method to get quality checks of an organ by ID
   async getQualityChecks(id: number) {
-    try{
-      const organ = await this.organRepository.findOneBy({id : id});
-      if(!organ){
-        throw new BadRequestException('No organ found')
+    try {
+      // Find the organ by ID
+      const organ = await this.organRepository.findOneBy({ id: id });
+      if (!organ) {
+        throw new BadRequestException('No organ found'); // Throw an exception if no organ is found
       }
       return organ.qualityChecks;
     } catch (error) {
       console.log(error);
-      throw new BadRequestException(error.detail);
+      throw new BadRequestException(error.detail); // Throw an exception if any error occurs
     }
   }
 }

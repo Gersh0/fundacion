@@ -1,6 +1,6 @@
 services:
-  fundacion-api:
-    image: fundacion-api
+  fundation-api:
+    image: fundation-api
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,7 +15,7 @@ services:
       DB_PORT: ${DB_PORT}
       PORT: ${PORT}
       SECRET_KEY: ${SECRET_KEY}
-    container_name: fundacion-api
+    container_name: fundation-api
     depends_on:
       - db
 

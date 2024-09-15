@@ -55,4 +55,13 @@ export class OrganController {
   remove(@Param('id') id: string) {
     return this.organService.remove(+id);
   }
+
+  @Get(':id/quality-checks')
+  @Roles('admin', 'client', 'provider')
+  @ApiOperation({ summary: 'Get quality checks of an organ by ID' })
+  @ApiParam({ name: 'id', type: String })
+  @ApiResponse({ status: 200, description: 'Return the quality checks of the organ.' })
+  getQualityChecks(@Param('id') id: string) {
+    return this.organService.getQualityChecks(+id);
+  }
 }
