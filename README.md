@@ -3,6 +3,9 @@
 </p>
 
 # Web Engineering Midterm (Read Carefully)
+## Made by
+* German Rivera
+* Tomas Quevedo
 
 ## Stack Used
 * PostgreSQL
