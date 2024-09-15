@@ -1,25 +1,25 @@
-import { CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/auth.entity';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private readonly jwtService: JwtService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
     private readonly reflector: Reflector,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const roles = this.reflector.get<string[]>('roles', context.getHandler());
     if (!roles) {
-      return true; // public route
+      return true;
     }
-    
+
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
@@ -32,19 +32,20 @@ export class AuthGuard implements CanActivate {
       const user = await this.userRepository.findOne({ where: { email: payload.email } });
 
       if (!user || !user.isActive) {
-        throw new UnauthorizedException('Unauthorized');
+        throw new BadRequestException('No user found');
       }
 
-      // if (roles && roles.length > 0) {
-      //   const hasRole = () => user.roles.some((role) => roles.includes(role));
-      //   if (!hasRole()) {
-      //     throw new ForbiddenException('Forbidden');
-      //   }
-      // }
+      if (roles && roles.length > 0) {
+        const hasRole = () => user.roles.some((role) => roles.includes(role));
+
+        if (!hasRole()) {
+          throw new ForbiddenException('This user does not have the required role to access this resource');
+        }
+      }
 
       const hasRole = () => user.roles.some((role) => roles.includes(role));
       if (!hasRole()) {
-        throw new UnauthorizedException('Forbidden');
+        throw new UnauthorizedException('This user does not have the required role to access this resource');
       }
 
       request.user = user;

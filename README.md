@@ -2,28 +2,34 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
+# Web Engineering Midterm (Read Carefully)
 
-# Parcial Ingeniería Web (Leer atentamente)
-
-## Stack usado
+## Stack Used
 * PostgreSQL
 * Nest
 * Docker
 
-## Pasos para poner en funcionamiento
+## Steps to Get It Running
 
-1. Clonar el repo
+1. Clone the repo
 
-2. Duplicar el archivo __.env.template__ y renombrar la copia a __.env__
+2. Duplicate the __.env.template__ file and rename the copy to __.env__
 
-3. Llenar las variables de entorno definidas en el __.env__
+3. Fill in the environment variables defined in the __.env__
 
-4. Levantar el contenedor de docker
+4. Start the Docker container
+
 ```
 docker compose --env-file .env up --build -d
 ```
 
-5. Reconstruir la base de datos con la semilla
+5. Rebuild the database with the seed
+
 ```
 http://localhost:3000/seed 
+```
+
+6. Postman requests
+```
+https://documenter.getpostman.com/view/34387005/2sAXqp7iM8
 ```

@@ -1,15 +1,15 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { OrganModule } from './organ/organ.module';
-import { QualityCheckModule } from './quality-check/quality-check.module';
-import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Organ } from './organ/entities/organ.entity';
+import { ConfigModule } from '@nestjs/config';
+import { Module } from '@nestjs/common';
+import { QualityCheckModule } from './quality-check/quality-check.module';
 import { QualityCheck } from './quality-check/entities/quality-check.entity';
-import { AuthModule } from './auth/auth.module';
+import { Organ } from './organ/entities/organ.entity';
 import { User } from './auth/entities/auth.entity';
+import { OrganModule } from './organ/organ.module';
+import { AppController } from './app.controller';
+import { AuthModule } from './auth/auth.module';
 import { SeedModule } from './seed/seed.module';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
