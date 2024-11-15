@@ -18,5 +18,10 @@ COPY package*.json ./
 RUN npm ci --only=prod
 COPY --from=builder /app/dist ./dist
 
+# Expose the port from the .env file
+ARG PORT
+ENV PORT=${PORT}
+EXPOSE ${PORT}
+
 # Run the NestJS application
 CMD ["node", "dist/main"]
