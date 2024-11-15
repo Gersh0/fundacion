@@ -24,6 +24,9 @@ import { AppService } from './app.service';
       entities: [User, Organ, QualityCheck],
       autoLoadEntities: true,
       synchronize: true,
+      ssl: {
+        rejectUnauthorized: false
+      }
     }),
     AuthModule,
     OrganModule, 
