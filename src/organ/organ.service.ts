@@ -62,11 +62,23 @@ export class OrganService {
   async findAll() {
     try {
       // Find all organs in the repository
-      const organs = await this.organRepository.find();
+      const organs: Organ[] = await this.organRepository.find({ relations: ['provider', 'qualityChecks'] });
       if (!organs) {
         throw new BadRequestException('No organ found'); // Throw an exception if no organs are found
       }
-      return organs;
+      // For each organ, let only the provider ID in the provider field
+      const organResponse = organs.map((organ) => {
+        return {
+          id: organ.id,
+          type: organ.type,
+          availability: organ.availability,
+          bloodtype: organ.bloodType,
+          provider: organ.provider.id,
+          qualityChecks: organ.qualityChecks,
+        };
+      });
+
+      return organResponse;
     } catch (error) {
       console.log(error);
       throw new BadRequestException(error.detail); // Throw an exception if any error occurs
