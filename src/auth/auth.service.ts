@@ -249,4 +249,18 @@ export class AuthService {
       throw new BadRequestException(error.detail);
     }
   }
+
+  async getOrgansByProviderID(id: number) {
+    const organs = await this.organRepository.find({ relations: ['provider'], where: { provider: { id } } });
+    const normalizedOrgans = organs.map((organ) => {
+      return {
+        id: organ.id,
+        type: organ.type,
+        availability: organ.availability,
+        bloodType: organ.bloodType,
+        qualityChecks: organ.qualityChecks,
+      };
+    });
+    return normalizedOrgans;
+  }
 }

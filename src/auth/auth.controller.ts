@@ -93,6 +93,15 @@ export class AuthController {
     return this.authService.findProviderById(+id);
   }
 
+  @Get('providers/:id/organs')
+  @Roles('admin', 'client', 'provider') // Applying the Roles decorator to restrict access to admins
+  @ApiOperation({ summary: 'Get all organs of a provider by ID' }) // Swagger documentation for the operation
+  @ApiParam({ name: 'id', type: String }) // Swagger documentation for the path parameter
+  @ApiResponse({ status: 200, description: 'Return all organs of the provider.' }) // Swagger documentation for the response
+  findProviderOrgans(@Param('id') id: string) {
+    return this.authService.getOrgansByProviderID(+id);
+  }
+
   // Route to get a user by ID
   @Get(':id')
   @Roles('admin') // Applying the Roles decorator to restrict access to admins
