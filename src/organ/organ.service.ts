@@ -2,19 +2,19 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateOrganDto, UpdateOrganDto } from './dto';
-import { User } from '../auth/entities/auth.entity';
-import { Organ } from './entities/organ.entity';
+import { Users } from '../auth/entities/auth.entity';
+import { Organs } from './entities/organ.entity';
 
 // Marking the class as injectable so it can be injected into other classes
 @Injectable()
 export class OrganService {
   // Constructor to inject dependencies
   constructor(
-    @InjectRepository(Organ)
-    private readonly organRepository: Repository<Organ>, // Injecting the Organ repository
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>, // Injecting the User repository
-  ) {}
+    @InjectRepository(Organs)
+    private readonly organRepository: Repository<Organs>, // Injecting the Organ repository
+    @InjectRepository(Users)
+    private readonly userRepository: Repository<Users>, // Injecting the User repository
+  ) { }
 
   // Method to create a new organ
   async create(createOrganDto: CreateOrganDto) {
@@ -62,7 +62,7 @@ export class OrganService {
   async findAll() {
     try {
       // Find all organs in the repository
-      const organs: Organ[] = await this.organRepository.find({ relations: ['provider', 'qualityChecks'] });
+      const organs: Organs[] = await this.organRepository.find({ relations: ['provider', 'qualityChecks'] });
       if (!organs) {
         throw new BadRequestException('No organ found'); // Throw an exception if no organs are found
       }
@@ -146,7 +146,7 @@ export class OrganService {
       console.log(error);
       throw new BadRequestException(
         error.detail ||
-          'An error occurred while marking the organ as unavailable',
+        'An error occurred while marking the organ as unavailable',
       ); // Throw an exception if any error occurs
     }
   }

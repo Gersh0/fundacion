@@ -8,20 +8,20 @@ import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreateAuthDto, LoginDto, UpdateAuthDto } from './dto';
-import { Organ } from '../organ/entities/organ.entity';
-import { User } from './entities/auth.entity';
+import { Organs } from '../organ/entities/organ.entity';
+import { Users } from './entities/auth.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(Users)
+    private readonly userRepository: Repository<Users>,
 
-    @InjectRepository(Organ)
-    private readonly organRepository: Repository<Organ>,
+    @InjectRepository(Organs)
+    private readonly organRepository: Repository<Organs>,
 
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   // Method to create a new user
   async create(createAuthDto: CreateAuthDto) {
@@ -29,15 +29,13 @@ export class AuthService {
       // Generate salt and hash the password
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(createAuthDto.password, salt);
-      const organs = [];
+      const organs: Organs[] = [];
 
       // Check if organs are provided and fetch them from the repository
-      if (createAuthDto.organs.length > 0) {
+      if (createAuthDto.organs && createAuthDto.organs.length > 0) {
         createAuthDto.organs.forEach(async (organId) => {
           const organ = await this.organRepository.findOneBy({ id: organId });
-          if (!organ) {
-            throw new BadRequestException('Organ not found');
-          } else {
+          if (organ) {
             organs.push(organ);
           }
         });
@@ -204,19 +202,19 @@ export class AuthService {
   // Method to find all providers
   async findAllProviders() {
     try {
-      const users = (
-        await this.userRepository.find({
-          where: { roles: 'provider' },
-        })
-      ).filter((user) => user.isActive === true);
+      const providers: Users[] = await this.userRepository.find({
+        relations: ['organs'],
+        where: { roles: 'provider', isActive: true },
+      });
 
-      if (!users) {
+      if (!providers || providers.length === 0) {
         throw new BadRequestException('No user found');
       }
-      return users;
+
+      return providers;
     } catch (error) {
       console.log(error);
-      throw new BadRequestException(error.detail);
+      throw new BadRequestException(error.detail || 'An error occurred while fetching providers');
     }
   }
 

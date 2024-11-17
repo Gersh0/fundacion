@@ -1,7 +1,7 @@
-import { Organ } from 'src/organ/entities/organ.entity';
+import { Organs } from 'src/organ/entities/organ.entity';
 import { USERS_SEED } from './users.seed';
 
-export const ORGANS_SEED: Organ[] = [
+export const ORGANS_SEED: Organs[] = [
   {
     type: 'Kidney',
     availability: true,

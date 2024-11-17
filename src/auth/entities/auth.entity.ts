@@ -1,8 +1,8 @@
-import { Organ } from 'src/organ/entities/organ.entity';
+import { Organs } from 'src/organ/entities/organ.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class User {
+export class Users {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
@@ -24,8 +24,8 @@ export class User {
   @Column('simple-array')
   roles: string[];
 
-  @OneToMany(() => Organ, (organ) => organ.client)
-  organs: Organ[];
+  @OneToMany(() => Organs, (organ) => organ.client)
+  organs: Organs[];
 
   @Column()
   isActive: boolean;

@@ -1,13 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { Organ } from 'src/organ/entities/organ.entity';
+import { Organs } from 'src/organ/entities/organ.entity';
 
 @Entity()
-export class QualityCheck {
+export class QualityChecks {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ManyToOne(() => Organ, (organ) => organ.qualityChecks)
-  organ: Organ;
+  @ManyToOne(() => Organs, (organ) => organ.qualityChecks)
+  organ: Organs;
 
   @Column()
   dateChecked: Date;

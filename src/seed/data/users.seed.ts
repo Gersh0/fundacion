@@ -1,6 +1,6 @@
-import { User } from 'src/auth/entities/auth.entity';
+import { Users } from 'src/auth/entities/auth.entity';
 
-export const USERS_SEED: User[] = [
+export const USERS_SEED: Users[] = [
   {
     name: 'Alice Johnson',
     email: 'alice.johnson@example.com',

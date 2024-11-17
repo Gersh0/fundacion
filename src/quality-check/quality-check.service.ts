@@ -2,18 +2,18 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateQualityCheckDto, UpdateQualityCheckDto } from './dto';
-import { QualityCheck } from './entities/quality-check.entity';
-import { Organ } from 'src/organ/entities/organ.entity';
+import { QualityChecks } from './entities/quality-check.entity';
+import { Organs } from 'src/organ/entities/organ.entity';
 
 // Marking the class as injectable so it can be injected into other classes
 @Injectable()
 export class QualityCheckService {
   // Constructor to inject dependencies
   constructor(
-    @InjectRepository(QualityCheck)
-    private readonly qualityCheckRepository: Repository<QualityCheck>, // Injecting the QualityCheck repository
-    @InjectRepository(Organ)
-    private readonly organRepository: Repository<Organ>, // Injecting the Organ repository
+    @InjectRepository(QualityChecks)
+    private readonly qualityCheckRepository: Repository<QualityChecks>, // Injecting the QualityCheck repository
+    @InjectRepository(Organs)
+    private readonly organRepository: Repository<Organs>, // Injecting the Organ repository
   ) {}
 
   // Method to create a new quality check

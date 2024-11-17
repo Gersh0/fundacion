@@ -2,22 +2,22 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Organ } from 'src/organ/entities/organ.entity';
-import { User } from 'src/auth/entities/auth.entity';
+import { Organs } from 'src/organ/entities/organ.entity';
+import { Users } from 'src/auth/entities/auth.entity';
 import { ORGANS_SEED } from './data/organs.seed';
 import { USERS_SEED } from './data/users.seed';
-import { QualityCheck } from '../quality-check/entities/quality-check.entity';
+import { QualityChecks } from '../quality-check/entities/quality-check.entity';
 
 @Injectable()
 export class SeedService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-    @InjectRepository(Organ)
-    private readonly organRepository: Repository<Organ>,
-    @InjectRepository(QualityCheck)
-    private readonly qualityCheckRepository: Repository<QualityCheck>,
-  ) {}
+    @InjectRepository(Users)
+    private readonly userRepository: Repository<Users>,
+    @InjectRepository(Organs)
+    private readonly organRepository: Repository<Organs>,
+    @InjectRepository(QualityChecks)
+    private readonly qualityCheckRepository: Repository<QualityChecks>,
+  ) { }
 
   async populateDB() {
     await this.qualityCheckRepository.delete({});
@@ -46,8 +46,8 @@ export class SeedService {
       const client = savedUsers.find((user) => user.id === organ.client.id);
       return {
         ...organ,
-        provider,
-        client,
+        provider: provider,
+        client: client ? client : null,
       };
     });
 

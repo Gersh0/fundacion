@@ -10,15 +10,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
-import { User } from './entities/auth.entity';
+import { Users } from './entities/auth.entity';
 
 // Marking the class as injectable so it can be injected into other classes
 @Injectable()
 export class AuthGuard implements CanActivate {
   // Constructor to inject dependencies
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>, // Injecting the User repository
+    @InjectRepository(Users)
+    private readonly userRepository: Repository<Users>, // Injecting the User repository
     private readonly jwtService: JwtService, // Injecting the JWT service
     private readonly reflector: Reflector, // Injecting the Reflector service
   ) {}

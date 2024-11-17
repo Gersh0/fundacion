@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
-import { QualityCheck } from 'src/quality-check/entities/quality-check.entity';
-import { User } from 'src/auth/entities/auth.entity';
+import { QualityChecks } from 'src/quality-check/entities/quality-check.entity';
+import { Users } from 'src/auth/entities/auth.entity';
 
 @Entity()
-export class Organ {
+export class Organs {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
@@ -16,12 +16,12 @@ export class Organ {
     @Column()
     bloodType: string;
 
-    @OneToMany(() => QualityCheck, (qualityCheck) => qualityCheck.organ)
-    qualityChecks: QualityCheck[];
+    @OneToMany(() => QualityChecks, (qualityCheck) => qualityCheck.organ)
+    qualityChecks: QualityChecks[];
 
-    @ManyToOne(() => User, (provider) => provider.organs)
-    provider: User;
+    @ManyToOne(() => Users, (provider) => provider.organs)
+    provider: Users;
 
-    @ManyToOne(() => User, (client) => client.organs)
-    client: User;
+    @ManyToOne(() => Users, (client) => client.organs)
+    client: Users;
 }

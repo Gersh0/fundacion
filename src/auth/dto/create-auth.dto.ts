@@ -63,7 +63,7 @@ export class CreateAuthDto {
     description: 'The IDs of the organs',
     required: false,
   })
-  organs: number[];
+  organs?: number[];
 
   @IsArray()
   @IsNotEmpty()
