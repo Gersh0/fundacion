@@ -73,9 +73,17 @@ export class AuthService {
   }
 
   // Method to find a user by ID
-  async findOne(id: number) {
+  async findOne(id: string) {
+    let query;
     try {
-      const user = await this.userRepository.findOneBy({ id: id });
+      if (!isNaN(+id)) {
+        query = { id: +id };
+      } else if (this.isEmail(id)) {
+        query = { email: id };
+      } else {
+        throw new BadRequestException('Invalid ID or email format');
+      }
+      const user = await this.userRepository.findOne({ where: query });
       if (!user || user.isActive === false) {
         throw new BadRequestException('No user found');
       }
@@ -234,19 +242,34 @@ export class AuthService {
     }
   }
 
+  //method to check if the istring is a valid email address
+  isEmail(email: string) {
+    const emailRegex = /\S+@\S+\.\S+/;
+    return emailRegex.test(email);
+  }
+
   // Method to find a client by ID
-  async findClientById(id: number) {
+  async findClientById(id: string) {
+    let query;
+
     try {
-      const user = await this.userRepository.findOne({
-        where: { id: id, roles: 'client' },
-      });
+
+      if (!isNaN(+id)) {
+        query = { id: +id, roles: 'client' };
+      } else if (this.isEmail(id)) {
+        query = { email: id, roles: 'client' };
+      } else {
+        throw new BadRequestException('Invalid ID or email format');
+      }
+
+      const user = await this.userRepository.findOne({ where: query });
       if (!user || user.isActive === false) {
         throw new BadRequestException('No user found');
       }
       return user;
     } catch (error) {
       console.log(error);
-      throw new BadRequestException(error.detail);
+      throw new BadRequestException(error.detail || 'An error occurred while fetching the client');
     }
   }
 

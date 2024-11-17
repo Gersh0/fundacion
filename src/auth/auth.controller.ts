@@ -37,6 +37,16 @@ export class AuthController {
     return this.authService.create(createAuthDto);
   }
 
+  @Get('check/:id')
+  check(@Param('id') id: string){
+    const user = this.authService.findOne(id);
+    if(user){
+      return true;
+    }else {
+      return false;
+    }
+  }
+
   // Route to login a user
   @Post('login')
   @ApiOperation({ summary: 'Login a user' }) // Swagger documentation for the operation
@@ -80,7 +90,7 @@ export class AuthController {
   @ApiParam({ name: 'id', type: String }) // Swagger documentation for the path parameter
   @ApiResponse({ status: 200, description: 'Return the client.' }) // Swagger documentation for the response
   findOneClient(@Param('id') id: string) {
-    return this.authService.findClientById(+id);
+    return this.authService.findClientById(id);
   }
 
   // Route to get a provider by ID
@@ -109,7 +119,7 @@ export class AuthController {
   @ApiParam({ name: 'id', type: String }) // Swagger documentation for the path parameter
   @ApiResponse({ status: 200, description: 'Return the user.' }) // Swagger documentation for the response
   findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+    return this.authService.findOne(id);
   }
 
   // Route to update a user by ID
