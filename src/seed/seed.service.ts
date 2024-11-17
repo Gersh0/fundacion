@@ -10,15 +10,14 @@ import { QualityCheck } from '../quality-check/entities/quality-check.entity';
 
 @Injectable()
 export class SeedService {
-
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     @InjectRepository(Organ)
     private readonly organRepository: Repository<Organ>,
     @InjectRepository(QualityCheck)
-    private readonly qualityCheckRepository: Repository<QualityCheck>
-  ) { }
+    private readonly qualityCheckRepository: Repository<QualityCheck>,
+  ) {}
 
   async populateDB() {
     await this.qualityCheckRepository.delete({});
@@ -28,25 +27,27 @@ export class SeedService {
     await this.userRepository.delete({});
     console.log('Users deleted');
 
-    const usersEncrypted = await Promise.all(USERS_SEED.map(async user => {
-      const hashedPassword = await this.encryptPassword(user.password);
-      return {
-        ...user,
-        password: hashedPassword
-      }
-    }));
+    const usersEncrypted = await Promise.all(
+      USERS_SEED.map(async (user) => {
+        const hashedPassword = await this.encryptPassword(user.password);
+        return {
+          ...user,
+          password: hashedPassword,
+        };
+      }),
+    );
 
     const savedUsers = await this.userRepository.save(usersEncrypted);
     console.log('Users saved');
 
     // Map user IDs to the organs
-    const organsWithUsers = ORGANS_SEED.map(organ => {
-      const provider = savedUsers.find(user => user.id === organ.provider.id);
-      const client = savedUsers.find(user => user.id === organ.client.id);
+    const organsWithUsers = ORGANS_SEED.map((organ) => {
+      const provider = savedUsers.find((user) => user.id === organ.provider.id);
+      const client = savedUsers.find((user) => user.id === organ.client.id);
       return {
         ...organ,
         provider,
-        client
+        client,
       };
     });
 
@@ -61,5 +62,4 @@ export class SeedService {
     const hashedPassword = await bcrypt.hash(password, salt);
     return hashedPassword;
   }
-
 }

@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
@@ -9,7 +13,6 @@ import { User } from './entities/auth.entity';
 
 @Injectable()
 export class AuthService {
-
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -17,8 +20,8 @@ export class AuthService {
     @InjectRepository(Organ)
     private readonly organRepository: Repository<Organ>,
 
-    private readonly jwtService: JwtService
-  ) { }
+    private readonly jwtService: JwtService,
+  ) {}
 
   // Method to create a new user
   async create(createAuthDto: CreateAuthDto) {
@@ -26,16 +29,16 @@ export class AuthService {
       // Generate salt and hash the password
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(createAuthDto.password, salt);
-      const organs = []
+      const organs = [];
 
       // Check if organs are provided and fetch them from the repository
       if (createAuthDto.organs.length > 0) {
-        createAuthDto.organs.forEach(async organId => {
-          const organ = await this.organRepository.findOneBy({ id: organId })
+        createAuthDto.organs.forEach(async (organId) => {
+          const organ = await this.organRepository.findOneBy({ id: organId });
           if (!organ) {
-            throw new BadRequestException('Organ not found')
+            throw new BadRequestException('Organ not found');
           } else {
-            organs.push(organ)
+            organs.push(organ);
           }
         });
       }
@@ -45,16 +48,15 @@ export class AuthService {
         ...createAuthDto,
         isActive: true,
         password: hashedPassword,
-        organs: organs
+        organs: organs,
       });
 
       // Save the new user to the database
       await this.userRepository.save(newUser);
       return newUser;
-
     } catch (error) {
-      console.log(error)
-      throw new BadRequestException(error.detail)
+      console.log(error);
+      throw new BadRequestException(error.detail);
     }
   }
 
@@ -63,12 +65,12 @@ export class AuthService {
     try {
       const users = await this.userRepository.find();
       if (!users) {
-        throw new BadRequestException('No user found')
+        throw new BadRequestException('No user found');
       }
       return users;
     } catch (error) {
-      console.log(error)
-      throw new BadRequestException(error.detail)
+      console.log(error);
+      throw new BadRequestException(error.detail);
     }
   }
 
@@ -77,7 +79,7 @@ export class AuthService {
     try {
       const user = await this.userRepository.findOneBy({ id: id });
       if (!user || user.isActive === false) {
-        throw new BadRequestException('No user found')
+        throw new BadRequestException('No user found');
       }
       return user;
     } catch (error) {
@@ -94,31 +96,42 @@ export class AuthService {
       if (!user) {
         throw new BadRequestException('User not found');
       }
-      
+
       // Prevent deactivating a user through this method
       if (user.isActive === false) {
-        throw new BadRequestException('Cannot deactivate a user, use the DELETE method instead');
+        throw new BadRequestException(
+          'Cannot deactivate a user, use the DELETE method instead',
+        );
       }
 
       // Encrypt password if it exists in the DTO
       if (updateAuthDto.password) {
         const salt = await bcrypt.genSalt();
-        updateAuthDto.password = await bcrypt.hash(updateAuthDto.password, salt);
+        updateAuthDto.password = await bcrypt.hash(
+          updateAuthDto.password,
+          salt,
+        );
       }
 
       // Handle organs if they exist in the DTO
       if (updateAuthDto.organs && updateAuthDto.organs.length > 0) {
-        const organs = await Promise.all(updateAuthDto.organs.map(async organId => {
-          const organ = await this.organRepository.findOneBy({ id: organId });
-          if (!organ) {
-            throw new BadRequestException(`Organ with ID ${organId} not found`);
-          }
-          return organ;
-        }));
+        const organs = await Promise.all(
+          updateAuthDto.organs.map(async (organId) => {
+            const organ = await this.organRepository.findOneBy({ id: organId });
+            if (!organ) {
+              throw new BadRequestException(
+                `Organ with ID ${organId} not found`,
+              );
+            }
+            return organ;
+          }),
+        );
+        //add the organs to the user
+        user.organs = organs;
       }
 
       // Update only the fields that are present in the DTO
-      Object.keys(updateAuthDto).forEach(key => {
+      Object.keys(updateAuthDto).forEach((key) => {
         if (updateAuthDto[key] !== undefined && key !== 'organs') {
           user[key] = updateAuthDto[key];
         }
@@ -127,29 +140,32 @@ export class AuthService {
       // Save the updated user to the database
       await this.userRepository.save(user);
       return user;
-
     } catch (error) {
       console.log(error);
-      throw new BadRequestException(error.detail || 'An error occurred while updating the user');
+      throw new BadRequestException(
+        error.detail || 'An error occurred while updating the user',
+      );
     }
   }
 
-    // Method to deactivate a user
+  // Method to deactivate a user
   async remove(id: number) {
     try {
       const user = await this.userRepository.findOneBy({ id });
       if (!user) {
         throw new BadRequestException('No user found');
       }
-  
+
       // Mark the user as not active
       user.isActive = false;
-  
+
       await this.userRepository.save(user);
       return user;
     } catch (error) {
       console.log(error);
-      throw new BadRequestException(error.detail || 'An error occurred while deactivating the user');
+      throw new BadRequestException(
+        error.detail || 'An error occurred while deactivating the user',
+      );
     }
   }
 
@@ -169,66 +185,70 @@ export class AuthService {
   // Method to find all clients
   async findAllClients() {
     try {
-      const users = (await this.userRepository.find(
-        { 
-          where: { roles: 'client' } 
-        }
-      )).filter(user => user.isActive === true);
+      const users = (
+        await this.userRepository.find({
+          where: { roles: 'client' },
+        })
+      ).filter((user) => user.isActive === true);
 
       if (!users) {
-        throw new BadRequestException('No user found')
+        throw new BadRequestException('No user found');
       }
       return users;
     } catch (error) {
-      console.log(error)
-      throw new BadRequestException(error.detail)
+      console.log(error);
+      throw new BadRequestException(error.detail);
     }
   }
 
   // Method to find all providers
   async findAllProviders() {
     try {
-      const users = (await this.userRepository.find(
-        { 
-          where: { roles: 'provider' } 
-        }
-      )).filter(user => user.isActive === true);
+      const users = (
+        await this.userRepository.find({
+          where: { roles: 'provider' },
+        })
+      ).filter((user) => user.isActive === true);
 
       if (!users) {
-        throw new BadRequestException('No user found')
+        throw new BadRequestException('No user found');
       }
       return users;
     } catch (error) {
-      console.log(error)
-      throw new BadRequestException(error.detail)
+      console.log(error);
+      throw new BadRequestException(error.detail);
     }
   }
 
   // Method to find a provider by ID
   async findProviderById(id: number) {
     try {
-      const user = await this.userRepository.findOne({ where: { id: id, roles: 'provider' } });
+      const user = await this.userRepository.findOne({
+        where: { id: id, roles: 'provider' },
+      });
       if (!user || user.isActive === false) {
-        throw new BadRequestException('No user found')
+        throw new BadRequestException('No user found');
       }
       return user;
     } catch (error) {
-      console.log(error)
-      throw new BadRequestException(error.detail)
+      console.log(error);
+      throw new BadRequestException(error.detail);
     }
   }
 
   // Method to find a client by ID
   async findClientById(id: number) {
     try {
-      const user = await this.userRepository.findOne({ where: { id: id, roles: 'client' } });
+      const user = await this.userRepository.findOne({
+        where: { id: id, roles: 'client' },
+      });
       if (!user || user.isActive === false) {
-        throw new BadRequestException('No user found')
+        throw new BadRequestException('No user found');
       }
       return user;
     } catch (error) {
-      console.log(error)
-      throw new BadRequestException(error.detail)
+      console.log(error);
+      throw new BadRequestException(error.detail);
     }
   }
 }

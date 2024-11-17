@@ -25,12 +25,15 @@ import { AppService } from './app.service';
       autoLoadEntities: true,
       synchronize: true,
       ssl: {
-        rejectUnauthorized: false
-      }
+        rejectUnauthorized: false,
+      },
     }),
     AuthModule,
-    OrganModule, 
-    QualityCheckModule, AuthModule, SeedModule],
+    OrganModule,
+    QualityCheckModule,
+    AuthModule,
+    SeedModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

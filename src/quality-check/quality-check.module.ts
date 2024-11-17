@@ -9,6 +9,6 @@ import { AuthModule } from '../auth/auth.module';
 @Module({
   controllers: [QualityCheckController],
   providers: [QualityCheckService],
-  imports: [TypeOrmModule.forFeature([QualityCheck, Organ]),AuthModule],
+  imports: [TypeOrmModule.forFeature([QualityCheck, Organ]), AuthModule],
 })
 export class QualityCheckModule {}

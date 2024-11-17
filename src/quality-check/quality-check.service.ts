@@ -8,13 +8,12 @@ import { Organ } from 'src/organ/entities/organ.entity';
 // Marking the class as injectable so it can be injected into other classes
 @Injectable()
 export class QualityCheckService {
-
   // Constructor to inject dependencies
   constructor(
     @InjectRepository(QualityCheck)
     private readonly qualityCheckRepository: Repository<QualityCheck>, // Injecting the QualityCheck repository
     @InjectRepository(Organ)
-    private readonly organRepository: Repository<Organ> // Injecting the Organ repository
+    private readonly organRepository: Repository<Organ>, // Injecting the Organ repository
   ) {}
 
   // Method to create a new quality check
@@ -23,7 +22,9 @@ export class QualityCheckService {
       // Extract organId from DTO
       const organId = createQualityCheckDto.organId;
       // Find the organ by ID
-      const organ = await this.organRepository.findOne({ where: { id: organId } });
+      const organ = await this.organRepository.findOne({
+        where: { id: organId },
+      });
       if (!organ) {
         throw new BadRequestException('Organ not found'); // Throw an exception if no organ is found
       }
@@ -35,7 +36,7 @@ export class QualityCheckService {
       const qualityCheck = this.qualityCheckRepository.create({
         organ: organ,
         notes: notes,
-        ...createQualityCheckDto
+        ...createQualityCheckDto,
       });
       // Save the quality check entity to the database
       return await this.qualityCheckRepository.save(qualityCheck);
@@ -64,7 +65,9 @@ export class QualityCheckService {
   async findOne(id: number) {
     try {
       // Find the quality check by ID
-      const qualityCheck = await this.qualityCheckRepository.findOneBy({ id: id });
+      const qualityCheck = await this.qualityCheckRepository.findOneBy({
+        id: id,
+      });
       if (!qualityCheck) {
         throw new BadRequestException('No qualityCheck found'); // Throw an exception if no quality check is found
       }
@@ -81,7 +84,7 @@ export class QualityCheckService {
       // Preload the quality check entity with the updated data
       const qualityCheck = await this.qualityCheckRepository.preload({
         id: id,
-        ...updateQualityCheckDto
+        ...updateQualityCheckDto,
       });
       if (!qualityCheck) {
         throw new BadRequestException('No qualityCheck found'); // Throw an exception if no quality check is found
@@ -99,7 +102,9 @@ export class QualityCheckService {
   async remove(id: number) {
     try {
       // Find the quality check by ID
-      const qualityCheck = await this.qualityCheckRepository.findOneBy({ id: id });
+      const qualityCheck = await this.qualityCheckRepository.findOneBy({
+        id: id,
+      });
       if (!qualityCheck) {
         throw new BadRequestException('No qualityCheck found'); // Throw an exception if no quality check is found
       }
@@ -116,7 +121,9 @@ export class QualityCheckService {
   async findOrgan(id: number) {
     try {
       // Find the quality check by ID
-      const qualityCheck = await this.qualityCheckRepository.findOneBy({ id: id });
+      const qualityCheck = await this.qualityCheckRepository.findOneBy({
+        id: id,
+      });
       if (!qualityCheck) {
         throw new BadRequestException('No qualityCheck found'); // Throw an exception if no quality check is found
       }

@@ -11,19 +11,20 @@ import { AuthService } from './auth.service';
 @Module({
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
-  imports: [TypeOrmModule.forFeature([User, Organ]),
-  PassportModule.register({ defaultStrategy: 'jwt' }),
-  JwtModule.registerAsync({
-    imports: [],
-    inject: [],
-    useFactory: async () => {
-      return {
-        secret: process.env.SECRET_KEY,
-        signOptions: { expiresIn: '15m' }
-      }
-    }
-  }
-  )],
-  exports: [PassportModule, JwtModule, JwtStrategy, TypeOrmModule]
+  imports: [
+    TypeOrmModule.forFeature([User, Organ]),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
+      imports: [],
+      inject: [],
+      useFactory: async () => {
+        return {
+          secret: process.env.SECRET_KEY,
+          signOptions: { expiresIn: '15m' },
+        };
+      },
+    }),
+  ],
+  exports: [PassportModule, JwtModule, JwtStrategy, TypeOrmModule],
 })
-export class AuthModule { }
+export class AuthModule {}

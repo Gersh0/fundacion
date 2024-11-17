@@ -1,4 +1,11 @@
-import { BadRequestException, CanActivate, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  CanActivate,
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
@@ -14,7 +21,7 @@ export class AuthGuard implements CanActivate {
     private readonly userRepository: Repository<User>, // Injecting the User repository
     private readonly jwtService: JwtService, // Injecting the JWT service
     private readonly reflector: Reflector, // Injecting the Reflector service
-  ) { }
+  ) {}
 
   // Method to determine if the request can proceed
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -35,9 +42,13 @@ export class AuthGuard implements CanActivate {
 
     try {
       // Verify the token and extract the payload
-      const payload = this.jwtService.verify(token, { secret: process.env.SECRET_KEY });
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.SECRET_KEY,
+      });
       // Find the user by email from the payload
-      const user = await this.userRepository.findOne({ where: { email: payload.email } });
+      const user = await this.userRepository.findOne({
+        where: { email: payload.email },
+      });
 
       if (!user || !user.isActive) {
         throw new BadRequestException('No user found'); // Throw an exception if no user is found or user is not active
@@ -48,7 +59,9 @@ export class AuthGuard implements CanActivate {
         const hasRole = () => user.roles.some((role) => roles.includes(role));
 
         if (!hasRole()) {
-          throw new ForbiddenException('This user does not have the required role to access this resource'); // Throw an exception if the user does not have the required role
+          throw new ForbiddenException(
+            'This user does not have the required role to access this resource',
+          ); // Throw an exception if the user does not have the required role
         }
       }
 
