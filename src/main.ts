@@ -5,6 +5,13 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // const allowedOrigins = ['http://localhost:3000', 'https://cofees.com.co'];
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -15,6 +22,7 @@ async function bootstrap() {
       // },
     }),
   );
+
   const config = new DocumentBuilder()
     .setTitle('Fundation API')
     .setDescription('The seed API description')
@@ -27,4 +35,5 @@ async function bootstrap() {
   await app.listen(port);
   console.log(`Application is running on port: ${port}`);
 }
+
 bootstrap();
