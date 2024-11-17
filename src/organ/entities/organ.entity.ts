@@ -13,6 +13,9 @@ export class Organ {
     @Column()
     availability: boolean;
 
+    @Column()
+    bloodType: string;
+
     @OneToMany(() => QualityCheck, (qualityCheck) => qualityCheck.organ)
     qualityChecks: QualityCheck[];
 

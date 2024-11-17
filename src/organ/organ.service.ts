@@ -8,13 +8,12 @@ import { Organ } from './entities/organ.entity';
 // Marking the class as injectable so it can be injected into other classes
 @Injectable()
 export class OrganService {
-
   // Constructor to inject dependencies
   constructor(
     @InjectRepository(Organ)
     private readonly organRepository: Repository<Organ>, // Injecting the Organ repository
     @InjectRepository(User)
-    private readonly userRepository: Repository<User> // Injecting the User repository
+    private readonly userRepository: Repository<User>, // Injecting the User repository
   ) {}
 
   // Method to create a new organ
@@ -25,7 +24,9 @@ export class OrganService {
       const clientId = createOrganDto.clientId;
 
       // Find the provider by ID and role
-      const provider = await this.userRepository.findOne({ where: { id: providerId, roles: 'provider' } });
+      const provider = await this.userRepository.findOne({
+        where: { id: providerId, roles: 'provider' },
+      });
       if (!provider) {
         throw new BadRequestException('Provider not found'); // Throw an exception if no provider is found
       }
@@ -33,7 +34,9 @@ export class OrganService {
       let client = null;
       if (clientId) {
         // Find the client by ID and role if clientId is provided
-        client = await this.userRepository.findOne({ where: { id: clientId, roles: 'client' } });
+        client = await this.userRepository.findOne({
+          where: { id: clientId, roles: 'client' },
+        });
         if (!client) {
           throw new BadRequestException('Client not found'); // Throw an exception if no client is found
         }
@@ -44,12 +47,11 @@ export class OrganService {
         ...createOrganDto,
         availability: true, // Set availability to true
         provider: provider,
-        client: client
+        client: client,
       });
 
       // Save the organ entity to the database
       return await this.organRepository.save(organ);
-
     } catch (error) {
       console.log(error);
       throw new BadRequestException(error.detail); // Throw an exception if any error occurs
@@ -96,7 +98,7 @@ export class OrganService {
       }
 
       // Update only the fields that are present in the DTO
-      Object.keys(updateOrganDto).forEach(key => {
+      Object.keys(updateOrganDto).forEach((key) => {
         if (updateOrganDto[key] !== undefined) {
           organ[key] = updateOrganDto[key];
         }
@@ -105,10 +107,11 @@ export class OrganService {
       // Save the updated organ to the database
       await this.organRepository.save(organ);
       return organ;
-
     } catch (error) {
       console.log(error);
-      throw new BadRequestException(error.detail || 'An error occurred while updating the organ'); // Throw an exception if any error occurs
+      throw new BadRequestException(
+        error.detail || 'An error occurred while updating the organ',
+      ); // Throw an exception if any error occurs
     }
   }
 
@@ -129,7 +132,10 @@ export class OrganService {
       return organ;
     } catch (error) {
       console.log(error);
-      throw new BadRequestException(error.detail || 'An error occurred while marking the organ as unavailable'); // Throw an exception if any error occurs
+      throw new BadRequestException(
+        error.detail ||
+          'An error occurred while marking the organ as unavailable',
+      ); // Throw an exception if any error occurs
     }
   }
 

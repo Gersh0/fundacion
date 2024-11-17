@@ -1,5 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiParam,
+} from '@nestjs/swagger';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { CreateOrganDto, UpdateOrganDto } from './dto';
 import { OrganService } from './organ.service';
@@ -60,7 +75,10 @@ export class OrganController {
   @Roles('admin', 'client', 'provider')
   @ApiOperation({ summary: 'Get quality checks of an organ by ID' })
   @ApiParam({ name: 'id', type: String })
-  @ApiResponse({ status: 200, description: 'Return the quality checks of the organ.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Return the quality checks of the organ.',
+  })
   getQualityChecks(@Param('id') id: string) {
     return this.organService.getQualityChecks(+id);
   }
