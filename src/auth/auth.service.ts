@@ -13,6 +13,7 @@ import { Users } from './entities/auth.entity';
 
 @Injectable()
 export class AuthService {
+
   constructor(
     @InjectRepository(Users)
     private readonly userRepository: Repository<Users>,
@@ -22,6 +23,21 @@ export class AuthService {
 
     private readonly jwtService: JwtService,
   ) { }
+
+  async checkToken(token: string) {
+    try {
+      if (this.isEmail(token)) {
+        const response = await this.userRepository.findOne({where: {email: token}});
+        return (response.email === token)? true : false;
+      }
+      const validToken = await this.jwtService.verify(token, {
+        secret: process.env.SECRET_KEY,
+      });
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 
   // Method to create a new user
   async create(createAuthDto: CreateAuthDto) {

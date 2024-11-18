@@ -37,15 +37,11 @@ export class AuthController {
     return this.authService.create(createAuthDto);
   }
 
-  @Get('check/:id')
-  check(@Param('id') id: string){
-    const user = this.authService.findOne(id);
-    if(user){
-      return true;
-    }else {
-      return false;
-    }
+  @Get('check/:token')
+  check(@Param('token') token: string) {
+    return this.authService.checkToken(token);
   }
+  
 
   // Route to login a user
   @Post('login')
