@@ -72,7 +72,7 @@ export class AuthController {
 
   // Route to get all providers
   @Get('providers')
-  @Roles('admin') // Applying the Roles decorator to restrict access to admins
+  @Roles('admin', 'client', 'provider') // Applying the Roles decorator to restrict access to admins
   @ApiOperation({ summary: 'Get all providers' }) // Swagger documentation for the operation
   @ApiResponse({ status: 200, description: 'Return all providers.' }) // Swagger documentation for the response
   findAllProviders() {
@@ -81,7 +81,7 @@ export class AuthController {
 
   // Route to get a client by ID
   @Get('clients/:id')
-  @Roles('admin') // Applying the Roles decorator to restrict access to admins
+  @Roles('admin', 'provider') // Applying the Roles decorator to restrict access to admins
   @ApiOperation({ summary: 'Get a client by ID' }) // Swagger documentation for the operation
   @ApiParam({ name: 'id', type: String }) // Swagger documentation for the path parameter
   @ApiResponse({ status: 200, description: 'Return the client.' }) // Swagger documentation for the response
@@ -91,7 +91,7 @@ export class AuthController {
 
   // Route to get a provider by ID
   @Get('providers/:id')
-  @Roles('admin') // Applying the Roles decorator to restrict access to admins
+  @Roles('admin', 'client', 'provider') // Applying the Roles decorator to restrict access to admins
   @ApiOperation({ summary: 'Get a provider by ID' }) // Swagger documentation for the operation
   @ApiParam({ name: 'id', type: String }) // Swagger documentation for the path parameter
   @ApiResponse({ status: 200, description: 'Return the provider.' }) // Swagger documentation for the response
