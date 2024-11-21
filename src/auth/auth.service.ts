@@ -27,14 +27,17 @@ export class AuthService {
   async checkToken(token: string) {
     try {
       if (this.isEmail(token)) {
-        const response = await this.userRepository.findOne({where: {email: token}});
-        return (response.email === token)? true : false;
+        const response = await this.userRepository.findOne({ where: { email: token } });
+        console.log(response);
+        return (response.email === token) ? true : false;
+      } else {
+        const validToken = await this.jwtService.verify(token, {
+          secret: process.env.SECRET_KEY,
+        });
+        return validToken ? true : false;
       }
-      const validToken = await this.jwtService.verify(token, {
-        secret: process.env.SECRET_KEY,
-      });
-      return true;
     } catch (error) {
+      console.log(error);
       return false;
     }
   }
